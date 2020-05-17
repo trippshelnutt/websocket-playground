@@ -1,19 +1,35 @@
 const main = document.querySelector('main');
-main.textContent = 'This is a test.';
+const button = document.querySelector('button');
+const message = document.querySelector('input');
 
-const socket = new WebSocket('ws://localhost:8081');
+function addMessage(message) {
+    const text = document.createTextNode(message);
+
+    const para = document.createElement('p');
+    para.appendChild(text);
+
+    main.appendChild(para);
+}
+
+function buttonClick() {
+    socket.send(message.value);
+}
 
 function socketOpen(e) {
     socket.send('Hello Server!');
 }
 
 function socketMessage(e) {
-    console.log('Message from server', e.data);
+    addMessage(`Message from server: '${e.data}'`);
 }
 
 function socketClose(e) {
-    console.log('Socket was closed');
+    addMessage('Socket was closed');
 }
+
+button.onclick = buttonClick;
+
+const socket = new WebSocket('ws://localhost:8081');
 
 socket.addEventListener('open', socketOpen);
 socket.addEventListener('message', socketMessage);
@@ -22,3 +38,5 @@ socket.addEventListener('close', socketClose);
 // socket.onopen = socketOpen;
 // socket.onmessage = socketMessage;
 // socket.onclose = socketClose;
+
+addMessage('Connection client...');

@@ -8,9 +8,10 @@ const socket = new WebSocket.Server({ port: 8081 });
 socket.on('connection', function connection(clientWS) {
     clientWS.on('message', function incoming(message) {
         console.log(`received: ${message}`);
+        clientWS.send(`got your message: ${message}`);
     });
 
-    clientWS.send('HAY!');
+    clientWS.send('Connected!');
 });
 
 const serve = serveStatic('./');
